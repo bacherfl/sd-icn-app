@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sdicn.model.LocationInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,16 +24,19 @@ public class ContentLocationController {
     }
 
     @RequestMapping(value = "/location/resolve", method = RequestMethod.GET)
-    public List<String> resolveContentLocation(@RequestParam(value = "contentName") String contentName) {
-        if (contentLocations.containsKey(contentName))
-            return contentLocations.get(contentName);
+    public LocationInfo resolveContentLocation(@RequestParam(value = "contentName") String contentName) {
+        if (contentLocations.containsKey(contentName)) {
+            LocationInfo locationInfo = new LocationInfo();
+            locationInfo.setLocations(contentLocations.get(contentName));
+            return  locationInfo;
+        }
         else return null;
     }
 
     @RequestMapping(value = "/location/add", method = RequestMethod.POST)
     public void addContentLocation(@RequestParam String contentName, @RequestParam String contentLocation) {
         if (!contentLocations.containsKey(contentName)) {
-            contentLocations.put(contentName, new ArrayList<>());
+            contentLocations.put(contentName, new ArrayList<String>());
         }
         contentLocations.get(contentName).add(contentLocation);
     }
