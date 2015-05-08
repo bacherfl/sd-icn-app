@@ -1,10 +1,13 @@
 package sdicn.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import model.LocationInfo;
+import sdicn.StatisticsService;
+import sdicn.model.RequestInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +20,9 @@ import java.util.Map;
 @RestController
 public class ContentLocationController {
 
+    @Autowired
+    StatisticsService statisticsService;
+
     private Map<String, List<String>> contentLocations;
 
     public ContentLocationController() {
@@ -24,7 +30,9 @@ public class ContentLocationController {
     }
 
     @RequestMapping(value = "/location/resolve", method = RequestMethod.GET)
-    public LocationInfo resolveContentLocation(@RequestParam(value = "contentName") String contentName) {
+    public LocationInfo resolveContentLocation(@RequestParam(value = "contentName") String contentName,
+                                               @RequestParam(value = "client") String client) {
+        statisticsService.storeRequestInfo(new RequestInfo(client, contentName));
         if (contentLocations.containsKey(contentName)) {
             LocationInfo locationInfo = new LocationInfo();
             locationInfo.setLocations(contentLocations.get(contentName));
