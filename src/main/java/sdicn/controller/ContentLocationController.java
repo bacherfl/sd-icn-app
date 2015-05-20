@@ -24,6 +24,7 @@ public class ContentLocationController {
     StatisticsService statisticsService;
 
     private Map<String, List<String>> contentLocations;
+    private Map<String, Long> contentSizes;
 
     public ContentLocationController() {
         contentLocations = new HashMap<>();
@@ -42,10 +43,16 @@ public class ContentLocationController {
     }
 
     @RequestMapping(value = "/location/add", method = RequestMethod.POST)
-    public void addContentLocation(@RequestParam String contentName, @RequestParam String contentLocation) {
+    public void addContentLocation(@RequestParam String contentName,
+                                   @RequestParam String contentLocation,
+                                   @RequestParam long size) {
         if (!contentLocations.containsKey(contentName)) {
             contentLocations.put(contentName, new ArrayList<String>());
         }
         contentLocations.get(contentName).add(contentLocation);
+
+        if (!contentSizes.containsKey(contentName)) {
+            contentSizes.put(contentName, size);
+        }
     }
 }

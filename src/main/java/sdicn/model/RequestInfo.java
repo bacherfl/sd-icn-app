@@ -1,11 +1,20 @@
 package sdicn.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by florian on 08.05.15.
  */
+@Entity
 public class RequestInfo {
+
+    @GeneratedValue
+    @Id
+    private Long id;
 
     private String client;
     private String name;
