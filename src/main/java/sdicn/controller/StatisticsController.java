@@ -12,6 +12,7 @@ import sdicn.model.RequestInfo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by florian on 08.05.15.
@@ -39,10 +40,20 @@ public class StatisticsController {
     }
 
     @RequestMapping(value= "/stats/popularities/between/{from}/{to}", method = RequestMethod.GET)
-    public List<ContentPopularity> getPopularitiesBetween(@PathVariable(value = "from") Long tsfrom,
-                                                        @PathVariable(value = "to") Long tsto) {
+    public List<ContentPopularity> getPopularitiesBetween(
+            @PathVariable(value = "from") Long tsfrom,
+            @PathVariable(value = "to") Long tsto) {
         Date from = new Date(tsfrom);
         Date to = new Date(tsto);
         return statisticsService.getContentPopularitiesBetween(from, to);
     }
+
+    @RequestMapping(value = "/stats/popularities/periods/{since}/{interval}", method = RequestMethod.GET)
+    public Map<Long, List<ContentPopularity>> getContentPopularitiesInPeriods(
+            @PathVariable(value = "since") Long tsFrom,
+            @PathVariable(value = "interval") Long interval) {
+        Date from = new Date(tsFrom);
+        return statisticsService.getContentPopularitiesInPeriods(from, interval);
+    }
+
 }

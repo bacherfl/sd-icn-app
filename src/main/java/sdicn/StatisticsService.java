@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import sdicn.model.ContentPopularity;
 import sdicn.model.RequestInfo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by florian on 08.05.15.
@@ -58,6 +55,21 @@ public class StatisticsService {
         List<RequestInfo> requests = getRequestsBetween(from, to);
         List<ContentPopularity> popularities = computePopularities(requests);
         return popularities;
+    }
+
+    public Map<Long, List<ContentPopularity>> getContentPopularitiesInPeriods(Date since, Long intervalInSeconds) {
+        Map<Long, List<ContentPopularity>> map = new HashMap<>();
+        Long idx = 0L;
+        Date tmpTo;
+        Date currentDate = new Date();
+        do {
+            tmpTo = new Date(since.getTime() + intervalInSeconds * 1000);
+            List<RequestInfo> requests = requestInfoRepository.findAllByDateBetweenOrderByDateAsc(since, tmpTo);
+            List<ContentPopularity> popularities = computePopularities(requests);
+            map.put(idx++, popularities);
+            since = tmpTo;
+        } while (tmpTo.before(currentDate));
+        return map;
     }
 
     private List<ContentPopularity> computePopularities(List<RequestInfo> requests) {
