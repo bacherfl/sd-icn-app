@@ -32,6 +32,8 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.jsondoc:spring-boot-starter-jsondoc:1.1.14')
+    compile('org.jsondoc:jsondoc-ui-webjar:1.1.14')
     runtime("com.h2database:h2")
     testCompile("org.springframework.boot:spring-boot-starter-test") 
 }
