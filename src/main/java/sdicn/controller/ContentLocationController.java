@@ -6,7 +6,7 @@ import org.jsondoc.core.annotation.ApiQueryParam;
 import org.jsondoc.core.annotation.ApiResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import model.LocationInfo;
+import sdicn.model.LocationInfo;
 import sdicn.StatisticsService;
 import sdicn.model.RequestInfo;
 

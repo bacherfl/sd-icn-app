@@ -1,4 +1,4 @@
-package model;
+package sdicn.model;
 
 import java.util.ArrayList;
 import java.util.List;
