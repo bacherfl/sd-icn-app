@@ -1,11 +1,20 @@
 package tg.client;
 
+import tg.popularity.PopularitySequence;
+
 /**
  * Created by florian on 12/06/15.
  */
 public class LunchTimeClient extends ClientState {
-    @Override
-    public void requestContent() {
+    public LunchTimeClient(DummyClient context) {
+        super(context);
+        popularities = PopularitySequence.getInstance()
+                .getPopularitiesForPhaseOfDay(PopularitySequence.PhaseOfDay.LUNCHTIME);
+    }
 
+    @Override
+    public void nextState() {
+        context.setState(new AfternoonClient(context));
+        context.getState().requestContent();
     }
 }

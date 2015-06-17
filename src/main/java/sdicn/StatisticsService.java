@@ -93,6 +93,14 @@ public class StatisticsService {
 
         popularities.forEach(p -> p.setPopularity((p.getCount() + 0.0) / total[0]));
 
+        popularities.sort((p1, p2) -> {
+            if (p1.getPopularity() < p2.getPopularity())
+                return 1;
+            else if (p1.getPopularity() == p2.getPopularity())
+                return 0;
+            else return -1;
+        });
+
         return popularities;
     }
 

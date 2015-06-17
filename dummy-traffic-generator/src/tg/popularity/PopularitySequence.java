@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class PopularitySequence {
 
-    public static PopularitySequence instance;
+    private static PopularitySequence instance;
 
     public enum PhaseOfDay {MORNING, LUNCHTIME, AFTERNOON, PRIMETIME, NIGHT};
 
@@ -22,7 +22,7 @@ public class PopularitySequence {
         popularitiesDuringPhaseOfDay = new HashMap<>();
     }
 
-    public PopularitySequence getInstance() {
+    public static PopularitySequence getInstance() {
         if (instance == null) {
             instance = new PopularitySequence();
         }

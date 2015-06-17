@@ -1,13 +1,20 @@
 package tg.client;
 
-import tg.client.ClientState;
+import tg.popularity.PopularitySequence;
 
 /**
  * Created by florian on 12/06/15.
  */
 public class PrimeTimeClient extends ClientState {
-    @Override
-    public void requestContent() {
+    public PrimeTimeClient(DummyClient context) {
+        super(context);
+        popularities = PopularitySequence.getInstance()
+                .getPopularitiesForPhaseOfDay(PopularitySequence.PhaseOfDay.PRIMETIME);
+    }
 
+    @Override
+    public void nextState() {
+        context.setState(new NightTimeClient(context));
+        context.getState().requestContent();
     }
 }
