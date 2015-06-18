@@ -30,11 +30,11 @@ public class PopularitySequence {
     }
 
     public void initialize(List<DummyContentInfo> contentItems) {
-        ZipfPopularityDistribution zd1 = new ZipfPopularityDistribution(contentItems, 1.0);
+        ZipfPopularityDistribution zd1 = new ZipfPopularityDistribution(contentItems, 0.3);
         popularitiesDuringPhaseOfDay.put(PhaseOfDay.MORNING, zd1.generatePopularities());
 
         Collections.shuffle(contentItems);
-        ZipfPopularityDistribution zd2 = new ZipfPopularityDistribution(contentItems, 2.0);
+        ZipfPopularityDistribution zd2 = new ZipfPopularityDistribution(contentItems, 0.6);
         popularitiesDuringPhaseOfDay.put(PhaseOfDay.LUNCHTIME, zd2.generatePopularities());
 
         Collections.shuffle(contentItems);
@@ -42,7 +42,7 @@ public class PopularitySequence {
         popularitiesDuringPhaseOfDay.put(PhaseOfDay.AFTERNOON, ud1.generatePopularities());
 
         Collections.shuffle(contentItems);
-        ZipfPopularityDistribution zd3 = new ZipfPopularityDistribution(contentItems, 4.0);
+        ZipfPopularityDistribution zd3 = new ZipfPopularityDistribution(contentItems, 1.0);
         popularitiesDuringPhaseOfDay.put(PhaseOfDay.PRIMETIME, zd3.generatePopularities());
 
         RandomPopularityDistribution rd1 = new RandomPopularityDistribution(contentItems);

@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class SimulationSchuedule extends Observable implements Runnable {
 
+    public static final double SPEEDUP_FACTOR = 180.0;
+
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(1);
 
@@ -38,20 +40,42 @@ public class SimulationSchuedule extends Observable implements Runnable {
 
     private void nextPhase() {
         if (phaseOfDay == PopularitySequence.PhaseOfDay.MORNING) {
-            waitForHours(3);
-            phaseOfDay = PopularitySequence.PhaseOfDay.LUNCHTIME;
+            scheduler.schedule((Runnable) () -> {
+                        phaseOfDay = PopularitySequence.PhaseOfDay.LUNCHTIME;
+                        nextPhase();
+                    },
+                    (long) (1000 * 3600 * 3 / SPEEDUP_FACTOR),
+                    TimeUnit.MILLISECONDS);
+            //waitForHours(3);
+            //phaseOfDay = PopularitySequence.PhaseOfDay.LUNCHTIME;
         } else if (phaseOfDay == PopularitySequence.PhaseOfDay.LUNCHTIME) {
-            waitForHours(2);
-            phaseOfDay = PopularitySequence.PhaseOfDay.AFTERNOON;
+            scheduler.schedule((Runnable) () -> {
+                        phaseOfDay = PopularitySequence.PhaseOfDay.AFTERNOON;
+                        nextPhase();
+                    },
+                    (long) (1000 * 3600 * 2 / SPEEDUP_FACTOR),
+                    TimeUnit.MILLISECONDS);
         } else if (phaseOfDay == PopularitySequence.PhaseOfDay.AFTERNOON) {
-            waitForHours(7);
-            phaseOfDay = PopularitySequence.PhaseOfDay.PRIMETIME;
+            scheduler.schedule((Runnable) () -> {
+                        phaseOfDay = PopularitySequence.PhaseOfDay.PRIMETIME;
+                        nextPhase();
+                    },
+                    (long) (1000 * 3600 * 7 / SPEEDUP_FACTOR),
+                    TimeUnit.MILLISECONDS);
         } else if(phaseOfDay == PopularitySequence.PhaseOfDay.PRIMETIME) {
-            waitForHours(3);
-            phaseOfDay = PopularitySequence.PhaseOfDay.NIGHT;
+            scheduler.schedule((Runnable) () -> {
+                        phaseOfDay = PopularitySequence.PhaseOfDay.NIGHT;
+                        nextPhase();
+                    },
+                    (long) (1000 * 3600 * 3 / SPEEDUP_FACTOR),
+                    TimeUnit.MILLISECONDS);
         } else if (phaseOfDay == PopularitySequence.PhaseOfDay.NIGHT) {
-            waitForHours(9);
-            phaseOfDay = PopularitySequence.PhaseOfDay.MORNING;
+            scheduler.schedule((Runnable) () -> {
+                        phaseOfDay = PopularitySequence.PhaseOfDay.MORNING;
+                        nextPhase();
+                    },
+                    (long) (1000 * 3600 * 9 / SPEEDUP_FACTOR),
+                    TimeUnit.MILLISECONDS);
             dayNr++;
         }
         setChanged();
@@ -59,7 +83,9 @@ public class SimulationSchuedule extends Observable implements Runnable {
     }
 
     private void waitForHours(int hours) {
-        scheduler.schedule((Runnable) () -> nextPhase(), 1000 * 10 * hours, TimeUnit.MILLISECONDS);
+        scheduler.schedule((Runnable) () -> nextPhase(),
+                (long) (1000 * 3600 * hours / SPEEDUP_FACTOR),
+                TimeUnit.MILLISECONDS);
         /*
         try {
             Thread.sleep(1000 * 10 * hours);

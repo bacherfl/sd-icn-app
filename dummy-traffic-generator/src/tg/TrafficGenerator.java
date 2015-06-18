@@ -25,7 +25,7 @@ public class TrafficGenerator {
 
         List<Thread> clientThreads = new ArrayList<>();
 
-        IntStream.range(0, 30).forEach(index -> {
+        IntStream.range(0, 3).forEach(index -> {
             DummyClient dummyClient = new DummyClient(dummyContentInfoList, 2000, "client" + index);
             schedule.addObserver(dummyClient);
             clientThreads.add(new Thread(dummyClient));

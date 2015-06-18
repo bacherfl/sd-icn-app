@@ -21,6 +21,7 @@ public abstract class ClientState {
 
     protected DummyClient context;
     protected List<PopularityItem> popularities;
+    protected boolean inactive = false;
 
     public ClientState(DummyClient context) {
         this.context = context;
@@ -29,20 +30,13 @@ public abstract class ClientState {
     public abstract void nextState();
 
     protected void requestContent() {
-        //while (true) {
-            String content = selectContent();
-            context.sendRequest(
-                    context.getContentRepository().stream()
-                            .filter(ci -> ci.getContentName().equalsIgnoreCase(content))
-                            .findFirst().get()
-            );
+        String content = selectContent();
+        context.sendRequest(
+                context.getContentRepository().stream()
+                        .filter(ci -> ci.getContentName().equalsIgnoreCase(content))
+                        .findFirst().get()
+        );
 
-            //try {
-            //    Thread.sleep((long) (Math.random() * 30 * 1000));
-            //} catch (InterruptedException e) {
-            //    e.printStackTrace();
-            //}
-        //}
     }
 
     protected String selectContent() {
@@ -62,6 +56,18 @@ public abstract class ClientState {
     }
 
     public void requestFinished() {
-        requestContent();
+        if (context.getAvailableRequests() > 0) {
+            requestContent();
+        } else {
+            inactive = true;
+        }
+    }
+
+    public boolean isInactive() {
+        return inactive;
+    }
+
+    public void setInactive(boolean inactive) {
+        this.inactive = inactive;
     }
 }
