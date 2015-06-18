@@ -104,4 +104,19 @@ public class StatisticsService {
         return popularities;
     }
 
+    public Map<Long, List<RequestInfo> > getRequestsSinceInPeriods(Long since, Long interval) {
+        Map<Long, List<RequestInfo>> map = new HashMap<>();
+        Long idx = 0L;
+        Date dateSince = new Date(since);
+        Date tmpTo;
+        Date currentDate = new Date();
+        do {
+            tmpTo = new Date(dateSince.getTime() + interval * 1000);
+            List<RequestInfo> requests = getRequestsBetween(dateSince, tmpTo);
+            map.put(idx++, requests);
+            dateSince = tmpTo;
+        } while (tmpTo.before(currentDate));
+
+        return map;
+    }
 }

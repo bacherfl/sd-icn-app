@@ -8,9 +8,7 @@ import sdicn.StatisticsService;
 import sdicn.model.ContentPopularity;
 import sdicn.model.RequestInfo;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by florian on 08.05.15.
@@ -26,6 +24,35 @@ public class StatisticsController {
     @RequestMapping(value = "/stats/requests", method = RequestMethod.GET)
     public @ApiResponseObject @ResponseBody List<RequestInfo> getRequests() {
         return statisticsService.getAllRequests();
+    }
+
+    @ApiMethod
+    @RequestMapping(value = "/stats/requests/{since}/{interval}", method = RequestMethod.GET)
+    public @ApiResponseObject
+    @ResponseBody Map<Long, List<RequestInfo>> getRequestsSinceInPeriods(
+            @ApiPathParam @PathVariable(value = "since") Long since,
+            @ApiPathParam @PathVariable(value = "interval") Long interval) {
+        return statisticsService.getRequestsSinceInPeriods(since, interval);
+    }
+
+
+    @ApiMethod
+    @RequestMapping(value = "/stats/requests/{since}/{interval}/count", method = RequestMethod.GET)
+    public @ApiResponseObject
+    @ResponseBody List<Long> getNumberOfRequestsSinceInPeriods(
+            @ApiPathParam @PathVariable(value = "since") Long since,
+            @ApiPathParam @PathVariable(value = "interval") Long interval) {
+        Map<Long, List<RequestInfo>> requestsSinceInPeriods =
+                statisticsService.getRequestsSinceInPeriods(since, interval);
+        List<Long> ret = new ArrayList<>();
+
+        requestsSinceInPeriods
+                .keySet()
+                .stream()
+                .mapToLong(key -> requestsSinceInPeriods.get(key).size())
+                .forEach(nrRequests -> ret.add(nrRequests));
+
+        return ret;
     }
 
     @ApiMethod
